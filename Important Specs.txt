@@ -1,0 +1,59 @@
+Entity
+{
+	Entity parent;
+	List<Entity> children;
+	string name - An alphanumeric string. 
+				  Two entities with the same parent cannot have the same name. 
+				  Similarly, two drives cannot have the same name.
+	string path – The concatenation of the names of the containing entities, from the drive down to and including the entity. 
+				  The names are separated by ‘\’.
+	int size; // Depends on what type of entity it is.
+
+}
+
+For a zip file, it is one half of the sum of all sizes of the entities it contains.
+
+Drives
+{
+	size; //For a drive or a folder, it is the sum of all sizes of the entities it contains.
+	// Parent must be null. Cannot be anything else.
+	// Children can be 0 or more
+}
+
+Folders
+{
+	size; //For a drive or a folder, it is the sum of all sizes of the entities it contains.
+	// Parent can not be null.
+	// Children can be 0 or more
+}
+
+Text files
+{
+	size; //it is the length of its content.
+	string content; //A string of text. 
+	// Parent can not be null.
+	// Cannot contain files -- children should be null or empty
+}
+
+Zip files
+{
+	size; //For a zip file, it is one half of the sum of all sizes of the entities it contains.
+	// Parent can not be null.
+	// Children can be 0 or more
+}
+
+Methods:
+3)	Move – Changing the parent of an entity.
+			Arguments: Source Path, Destination Path. 
+4)	WriteToFile – Changes the content of a text file.
+			Arguments: Path, new Content
+
+void Move(Path src, Path dest)
+{
+
+}
+
+void WriteToFile(Path src, string newContent)
+{
+
+}

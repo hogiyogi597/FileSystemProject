@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace FileSystem
 {
-    public class Class1
+    class FileSystem
     {
+        List<Drive> drives;
     }
 }
