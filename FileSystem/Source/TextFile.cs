@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * TextFile class.
+ * Text files must have a parent. Their size comes from the length of their content. Cannot have children.
+ * 
+ * Created by Stephen Hogan - 10/23/17
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +15,6 @@ namespace FileSystem
 {
     class TextFile : Entity
     {
-        //parent cannot be null
-        //cannot have children
-
         private string content;
 
         public TextFile(Entity _parent, string _name, string _filePath, string _content) : base(_parent, _name, _filePath)

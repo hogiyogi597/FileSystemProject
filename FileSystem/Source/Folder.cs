@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * Folder class.
+ * Folders must have a parent. Their size comes from the summation of the size of all the entities it contains.
+ * 
+ * Created by Stephen Hogan - 10/23/17
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * ZipFile class.
+ * Zip files must have a parent. Their size comes from the summation of the size of all the entities it contains divided by 2.
+ * 
+ * Created by Stephen Hogan - 10/23/17
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +15,6 @@ namespace FileSystem
 {
     class ZipFile : Entity
     {
-        // children can be 0 or more
-
         public ZipFile(Entity _parent, string _name, string _filePath) : base(_parent, _name, _filePath)
         {
             if (_parent == null)

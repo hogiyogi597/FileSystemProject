@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * Unit tests for the FileSystem project.
+ * 
+ * Created by Stephen Hogan - 10/23/17
+ */ 
+  
+
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FileSystem;
 using System.Collections.Generic;
@@ -24,6 +31,18 @@ namespace FileSystemTests
             fs.WriteToFile("\\C\\Desktop\\zip1\\file1", "hello world!");
             Assert.AreEqual(fs.GetSize(), 6);
 
+            try
+            {
+                // Adding a duplicate text file to the same parent should result in an Error
+                fs.Create(FileExplorer.EntityTypes.TextFile, "file1", "\\C\\Desktop\\zip1");
+                fs.WriteToFile("\\C\\Desktop\\zip1\\file1", "hello world!");
+                Assert.AreEqual(fs.GetSize(), 6);
+            }
+            catch
+            {
+                Assert.IsTrue(true);
+            }
+
             // Creating an empty text file should not change the size
             fs.Create(FileExplorer.EntityTypes.TextFile, "file1", "\\C\\Desktop");
             Assert.AreEqual(fs.GetSize(), 6);
@@ -38,6 +57,19 @@ namespace FileSystemTests
             fs.Delete("\\C\\Desktop");
             Assert.AreEqual(fs.GetPathsOfAllEntities().Count, 2);
             Assert.AreEqual(fs.GetSize(), 12);
+
+            fs.Create(FileExplorer.EntityTypes.Drive, "D", "");
+
+            try
+            {
+                fs.Move("\\D", "\\C");
+            }
+            catch
+            {
+                Assert.IsTrue(true);
+                return;
+            }
+            Assert.Fail();
         }
 
         [TestMethod]

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * Base class for an Entity. Used as an abstract class to be derived from in each entity's class.
+ * Holds the basic characteristics and methods to help with creation, deletion, moving, and writing.
+ * 
+ * Created by Stephen Hogan - 10/23/17
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,17 +16,18 @@ namespace FileSystem
 {
     public abstract class Entity
     {
-        protected string alphanumericPattern = "^[A-Za-z0-9_]*$";
-        protected Entity parent;
-        protected List<Entity> children;
+        protected string alphanumericPattern = "^[A-Za-z0-9_]*$"; // Forces names to be alphanumerical
+        protected Entity parent; // References the parent of the entity
+        protected Dictionary<string, Entity> children; // Holds the children of the entity (file path, Entity)
         protected string name;
         protected string filePath;
         protected int size;
 
         public Entity(Entity _parent, string _name, string _filePath)
         {
+            
             parent = _parent;
-            children = new List<Entity>();
+            children = new Dictionary<string, Entity>();
             if(!Regex.IsMatch(_name, alphanumericPattern))
             {
                 throw new Exception("Name can only be alphanumerical characters");
@@ -29,21 +37,20 @@ namespace FileSystem
             size = CalculateSize();
             if(parent != null && parent.children != null)
             {
-                parent.children.Add(this);
+                if (_parent.children.ContainsKey(_filePath))
+                {
+                    throw new Exception("Cannot add duplicate names!");
+                }
+                parent.children.Add(filePath, this);
             }
-        }
-
-        public string GetFilePath()
-        {
-            return filePath;
         }
 
         public virtual int CalculateSize()
         {
             size = 0;
-            foreach (Entity e in children)
+            foreach (KeyValuePair<string, Entity> e in children)
             {
-                size += e.CalculateSize();
+                size += e.Value.CalculateSize();
             }
             return size;
         }
@@ -52,26 +59,34 @@ namespace FileSystem
         {
             if(this.parent != null)
             {
-                this.parent.children.Remove(this);
+                this.parent.children.Remove(this.filePath);
             }
         }
 
-        public void ChangeParent(Entity newParent)
+        public virtual void ChangeParent(Entity newParent)
         {
-            if(this.parent != null)
+            if(this is Drive && newParent != null)
             {
-                this.parent.children.Remove(this);
+                throw new Exception("Drives cannot have a parent!");
             }
+            if((this is Folder || this is ZipFile) && newParent == null)
+            {
+                throw new Exception("Folders and Zip files must be contained in a Drive, Folder, or Zip!");
+            }
+            if (newParent is TextFile)
+            {
+                throw new Exception("Text files cannot hold entities!");
+            }
+
+            RemoveFromFileSystem();
             if(newParent != null)
             {
-                this.filePath = String.Concat(newParent.GetFilePath() + "\\" + this.name);
-                newParent.children.Add(this);
+                this.filePath = String.Concat(newParent.filePath + "\\" + this.name);
+                newParent.children.Add(this.filePath, this);
             }
         }
 
-        public virtual void Write(string newContent)
-        {
-        }
+        public virtual void Write(string newContent) { }
 
         public Entity GetEntityAtPath(string path)
         {
@@ -79,11 +94,11 @@ namespace FileSystem
             {
                 return this;
             }
-            foreach (Entity e in this.children)
+            foreach(KeyValuePair<string, Entity> e in this.children)
             {
-                if (path.Contains(e.GetFilePath()))
+                if (path.Contains(e.Key))
                 {
-                    return e.GetEntityAtPath(path);
+                    return e.Value.GetEntityAtPath(path);
                 }
             }
             return null;
@@ -98,9 +113,9 @@ namespace FileSystem
             {
                 return paths;
             }
-            foreach(Entity e in children)
+            foreach (KeyValuePair<string, Entity> e in this.children)
             {
-                paths.AddRange(e.GetAllPaths());
+                paths.AddRange(e.Value.GetAllPaths());
             }
             return paths;
         }
