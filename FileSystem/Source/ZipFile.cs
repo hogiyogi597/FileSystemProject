@@ -8,16 +8,20 @@ namespace FileSystem
 {
     class ZipFile : Entity
     {
-        // parent must be null... somehow we need to restrict this.
         // children can be 0 or more
+
+        public ZipFile(Entity _parent, string _name, string _filePath) : base(_parent, _name, _filePath)
+        {
+            if (_parent == null)
+            {
+                throw new Exception("Zip files' parents cannot be null");
+            }
+            size = CalculateSize();
+        }
 
         public override int CalculateSize()
         {
-            size = 0;
-            foreach (Entity e in children)
-            {
-                size += e.CalculateSize();
-            }
+            size = base.CalculateSize();
             size /= 2;
             return size;
         }

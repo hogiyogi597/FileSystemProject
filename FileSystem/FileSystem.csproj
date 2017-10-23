@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="Source\Drive.cs" />
     <Compile Include="Source\Entity.cs" />
-    <Compile Include="Source\FileSystem.cs" />
+    <Compile Include="Source\FileExplorer.cs" />
     <Compile Include="Source\Folder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\TextFile.cs" />

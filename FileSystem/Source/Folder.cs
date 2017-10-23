@@ -8,18 +8,12 @@ namespace FileSystem
 {
     class Folder : Entity
     {
-
-        // parent must be null... somehow we need to restrict this.
-        // children can be 0 or more
-
-        public override int CalculateSize()
+        public Folder(Entity _parent, string _name, string _filePath) : base(_parent, _name, _filePath)
         {
-            size = 0;
-            foreach (Entity e in children)
+            if (_parent == null)
             {
-                size += e.CalculateSize();
+                throw new Exception("Folders' parents cannot be null");
             }
-            return size;
         }
     }
 }

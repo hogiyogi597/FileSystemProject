@@ -11,8 +11,6 @@ Entity
 
 }
 
-For a zip file, it is one half of the sum of all sizes of the entities it contains.
-
 Drives
 {
 	size; //For a drive or a folder, it is the sum of all sizes of the entities it contains.

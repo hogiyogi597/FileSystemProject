@@ -8,24 +8,13 @@ namespace FileSystem
 {
     class Drive : Entity
     {
-        // parent must be null... somehow we need to restrict this.
-        // children can be 0 or more
 
-        public override int CalculateSize()
+        public Drive (Entity _parent, string _name, string _filePath) : base(_parent, _name, _filePath)
         {
-            size = 0;
-            foreach(Entity e in children)
+            if (_parent != null)
             {
-                size += e.CalculateSize();
+                throw new Exception("Drives cannot have a parent");
             }
-            return size;
-        }
-
-        public override Entity Move(string srcPath, string destPath)
-        {
-            if (srcPath == filePath)
-                return null; // Cannot move a drive.
-            base.Move(srcPath, destPath);
         }
     }
 }
